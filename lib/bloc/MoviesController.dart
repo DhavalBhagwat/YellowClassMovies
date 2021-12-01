@@ -51,6 +51,15 @@ class MoviesController extends GetxController {
     });
   }
 
+  Future<Null> removeFromList(int index) async {
+    try {
+      movies.removeAt(index);
+      update();
+    } catch (error) {
+      _logger.e(_TAG, "removeFromList()", message: error.toString());
+    }
+  }
+
   @override
   void onClose() {
     if (movies.isNotEmpty) movies.clear();

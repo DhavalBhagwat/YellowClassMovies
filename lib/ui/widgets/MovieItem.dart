@@ -1,18 +1,23 @@
 import 'dart:io';
-import 'package:app/bloc/lib.dart';
-import 'package:app/data/lib.dart';
-import 'package:app/utils/lib.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:app/bloc/lib.dart';
+import 'package:app/data/lib.dart';
+import 'package:app/services/lib.dart';
+import 'package:app/utils/lib.dart';
 
 class MovieItem extends StatelessWidget {
 
   final Movie? movie;
+  final int? index;
   final MoviesController? controller;
+
+  static const String _TAG = "MovieItem";
 
   MovieItem({
     Key? key,
     @required this.movie,
+    @required this.index,
     @required this.controller,
   }) : super(key: key);
 
@@ -103,8 +108,13 @@ class MovieItem extends StatelessWidget {
 
   }
 
-  void _deleteMovie() {
-
+  void _deleteMovie() async {
+    try {
+      await controller?.removeFromList(index!);
+      await DataService.getInstance.deleteMovie(id: index!, poster: movie!.poster);
+    } catch (error) {
+      Logger.getInstance.e(_TAG, "deleteMovie()", message: error.toString());
+    }
   }
 
 }

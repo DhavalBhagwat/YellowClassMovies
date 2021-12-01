@@ -65,6 +65,13 @@ class DataService {
     });
   }
 
+  Future<void> deleteMovie({int? id, String? poster}) async {
+    await ImageUtils.deleteFile(poster!);
+    await _databaseManager.delete(TableManager.MOVIES, id!).catchError((error) {
+      _logger.e(_TAG, "deleteMovie()", message: error.toString());
+    });
+  }
+
 
 }
 //

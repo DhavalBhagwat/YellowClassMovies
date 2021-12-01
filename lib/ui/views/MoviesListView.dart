@@ -33,7 +33,7 @@ class _MoviesListViewState extends State<MoviesListView> with TickerProviderStat
                 child: ListView.builder(
                   controller: controller.controller,
                   itemCount: controller.movies.length,
-                  itemBuilder: (context, index) => MovieItem(movie: controller.movies[index], controller: controller)
+                  itemBuilder: (context, index) => MovieItem(movie: controller.movies[index], controller: controller, index: index)
                   ),
                 ),
                 if (controller.isUpdating.value) Align(

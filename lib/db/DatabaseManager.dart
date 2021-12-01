@@ -73,8 +73,8 @@ class DatabaseManager {
   //   });
   // }
 
-  Future<int?> delete(String tableName) async {
-    return await getInstance.openDb.then((db) async => await db?.delete(tableName)).catchError((error) {
+  Future<int?> delete(String tableName, int id) async {
+    return await getInstance.openDb.then((db) async => await db?.delete(tableName, where: 'id = ?', whereArgs: [id])).catchError((error) {
       _logger.e(_TAG, "delete()", message: error.toString());
       return null;
     });
