@@ -23,8 +23,8 @@ class MovieItem extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
-                color: AppTheme.colorAccent.withOpacity(0.25),
-                width: 2
+              color: AppTheme.colorAccent.withOpacity(0.25),
+              width: 2.0
             ),
           ),
           child: Container(
@@ -36,14 +36,15 @@ class MovieItem extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(0.0),
-                      bottomLeft: Radius.circular(0.0)
+              Container(
+                child: ClipRRect(
+                  child: Image.file(
+                    File.fromUri(Uri.parse(movie!.poster!)),
+                    width: 100.0,
                   ),
-                  child: Image.file(File.fromUri(Uri.parse(movie!.poster!))),
                 ),
-                Expanded(
+              ),
+              Expanded(
                   child: ListTile(
                     title: Container(
                       margin: EdgeInsets.all(2.0),
@@ -73,10 +74,37 @@ class MovieItem extends StatelessWidget {
                     ),
                   ),
                 ),
+                _getActionButtons()
               ],
             ),
           ),
         ),
     );
   }
+
+  Widget _getActionButtons() => Container(
+    child: Column(
+      children: [
+        IconButton(
+          color: AppTheme.grey,
+          icon: Icon(Icons.edit),
+          onPressed: () => _editMovie(),
+        ),
+        IconButton(
+          color: AppTheme.grey,
+          icon: Icon(Icons.delete),
+          onPressed: () => _deleteMovie(),
+        ),
+      ],
+    ),
+  );
+
+  void _editMovie() {
+
+  }
+
+  void _deleteMovie() {
+
+  }
+
 }
