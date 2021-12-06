@@ -43,13 +43,13 @@ class Logger {
     } else _logger?.w("$tag : $methodName");
   }
 
-  Future<String?> get localPath async {
-    final directory = Platform.isAndroid ? await getApplicationDocumentsDirectory() : await getApplicationSupportDirectory();
-    return directory.path;
+  static Future<String> get _localPath async {
+    if (Platform.isIOS) return await getApplicationDocumentsDirectory().then((directory) => directory.path);
+    return await getExternalStorageDirectory().then((directory) => directory!.path);
   }
 
   Future<File> get localFile async {
-    final path = await localPath;
+    final path = await _localPath;
     return File("$path/YCM_LOGS.txt");
   }
 

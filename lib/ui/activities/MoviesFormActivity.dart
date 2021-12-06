@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:app/utils/lib.dart';
 import 'package:app/ui/lib.dart';
@@ -9,13 +10,8 @@ import 'package:app/services/lib.dart';
 
 class MoviesFormActivity extends StatefulWidget {
 
-  final bool? isEdit;
-  final int? id;
-
   const MoviesFormActivity({
     Key? key,
-    this.isEdit = false,
-    this.id = -1
   }) : super(key: key);
 
   @override
@@ -29,13 +25,14 @@ class _MoviesFormActivityState extends State<MoviesFormActivity> {
   Logger? _logger;
   XFile? _image;
   Movie? _movie;
+  bool? _isEdit;
+  int? _id;
 
   @override
   void initState() {
     super.initState();
     _logger = Logger.getInstance;
-    _nameController = TextEditingController();
-    _directorController = TextEditingController();
+    _init();
   }
 
   @override
@@ -45,7 +42,7 @@ class _MoviesFormActivityState extends State<MoviesFormActivity> {
       resizeToAvoidBottomInset: false,
       appBar: CupertinoNavigationBar(
         backgroundColor: AppTheme.white,
-        middle: widget.isEdit! ? Text("Edit Movie") : Text("Add Movie"),
+        middle: _isEdit! ? Text("Edit Movie") : Text("Add Movie"),
         leading: InkWell(
           child: Icon(
             Icons.arrow_back_ios,
@@ -70,7 +67,7 @@ class _MoviesFormActivityState extends State<MoviesFormActivity> {
 
             SizedBox(height: 20.0),
 
-            _getSubmitButton(context, widget.isEdit! ? "Update" : "Add", () => _onClick()),
+            _getSubmitButton(context, _isEdit! ? "Update" : "Add", () => _onClick()),
 
           ],
         ),
@@ -98,16 +95,22 @@ class _MoviesFormActivityState extends State<MoviesFormActivity> {
   );
 
   Widget _getSubmitButton(BuildContext context, String label, Function onPressed) => FormButton(
-      context: context,
-      label: label,
-      onPressed: onPressed
+    context: context,
+    label: label,
+    onPressed: onPressed
   );
+
+  void _init() {
+    _isEdit = Get.arguments["isEdit"];
+    _id = Get.arguments["id"];
+    _nameController = TextEditingController();
+    _directorController = TextEditingController();
+  }
 
   dynamic _loadImage() => _image != null ? FileImage(File.fromUri(Uri.parse(_image!.path))) : AssetImage(Assets.DEFAULT_IMAGE);
 
   void _getImage() async {
     await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 25).then((image) {
-      print("HI");
       setState(() {
         _image = image;
       });
@@ -115,7 +118,7 @@ class _MoviesFormActivityState extends State<MoviesFormActivity> {
   }
 
   void _onClick() {
-    if (widget.isEdit!) DataService.getInstance.editMovie(id: widget.id, name: _nameController?.value.text, director: _directorController?.value.text, poster: _image!.path);
+    if (_isEdit!) DataService.getInstance.editMovie(id: _id, name: _nameController?.value.text, director: _directorController?.value.text, poster: _image!.path);
     else DataService.getInstance.addMovie(name: _nameController?.value.text, director: _directorController?.value.text, poster: _image!.path);
   }
 

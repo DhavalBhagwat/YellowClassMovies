@@ -104,9 +104,7 @@ class MovieItem extends StatelessWidget {
     ),
   );
 
-  void _editMovie() {
-
-  }
+  void _editMovie() => NavigationService.getInstance.moviesFormActivity(isEdit: true, id: index);
 
   void _deleteMovie() async {
     try {
