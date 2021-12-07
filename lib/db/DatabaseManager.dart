@@ -60,7 +60,7 @@ class DatabaseManager {
   }
 
   Future<int?> update(String tableName, Map<String, dynamic> row) async {
-    return await getInstance.openDb.then((db) async => await db?.update(tableName, row, where: 'id = ?', whereArgs: [row[0]])).catchError((error) {
+    return await getInstance.openDb.then((db) async => await db?.update(tableName, row, where: 'id = ?', whereArgs: [row["id"]])).catchError((error) {
       _logger.e(_TAG, "update()", message: error.toString());
       return null;
     });

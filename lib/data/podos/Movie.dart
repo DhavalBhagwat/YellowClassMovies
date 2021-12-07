@@ -1,12 +1,14 @@
 class Movie {
 
+  int? id = -1;
   String? name = "";
   String? director = "";
   String? poster = "";
 
-  Movie({this.name, this.director, this.poster}) : super();
+  Movie({this.id, this.name, this.director, this.poster}) : super();
 
   Map<String, dynamic> toJson() => {
+    'id': id,
     'name': name,
     'director': director,
     'poster': poster

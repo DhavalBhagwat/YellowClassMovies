@@ -27,13 +27,21 @@ class DataService {
     return await _databaseManager.getAll(TableManager.MOVIES, limit: limit, offset: offset).then((result) {
       if (result!.isNotEmpty) {
         for (var map in result) {
-          movieList.add(Movie(name: map["name"], director: map["director"], poster: map["poster"]));
+          movieList.add(Movie(id: map["id"], name: map["name"], director: map["director"], poster: map["poster"]));
         }
       }
       return movieList;
     }).catchError((error) {
       _logger.e(_TAG, "getMovieList()", message: error.toString());
       return movieList;
+    });
+  }
+
+  Future<Movie> getMovie(int? id) async {
+    return await _databaseManager.rawQuery('SELECT * FROM ${TableManager.MOVIES} WHERE id = $id').then((result) {
+      return Movie(id: result[0]["id"], name: result[0]["name"], director: result[0]["director"], poster: result[0]["poster"]);
+    }).catchError((error) {
+      _logger.e(_TAG, "getMovie()", message: error.toString());
     });
   }
 
@@ -50,14 +58,15 @@ class DataService {
     });
   }
 
-  Future<List<Movie>?> editMovie({int? id, String? name, String? director, String? poster}) async {
-    String imagePath = await ImageUtils.savePhotoFile(File(poster!));
+  Future<List<Movie>?> editMovie(Movie movie, bool isSame) async {
+    String? imagePath = isSame ? movie.poster : await ImageUtils.savePhotoFile(File(movie.poster!));
     Map<String, dynamic> movieMap = Map();
-    movieMap["id"] = id;
-    movieMap["name"] = name;
-    movieMap["director"] = director;
+    movieMap["id"] = movie.id;
+    movieMap["name"] = movie.name;
+    movieMap["director"] = movie.director;
     movieMap["poster"] = imagePath;
-    _databaseManager.update(TableManager.MOVIES, movieMap).catchError((error) {
+    print("movieMap    $movieMap");
+    await _databaseManager.update(TableManager.MOVIES, movieMap).catchError((error) {
       _logger.e(_TAG, "editMovie()", message: error.toString());
     }).whenComplete(() {
       NavigationService.getInstance.dashboardActivity();

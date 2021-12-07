@@ -20,78 +20,42 @@ class UserService {
 
   static const String _TAG = "UserService";
   Logger _logger = Logger.getInstance;
-  static Future<FirebaseApp> initializeFirebase({
-    required BuildContext context,
-  }) async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
 
+  bool getCurrentUser() {
     User? user = FirebaseAuth.instance.currentUser;
-
     if (user != null) {
-      // Navigator.of(context).pushReplacement(
-      //   MaterialPageRoute(
-      //     builder: (context) => UserInfoScreen(
-      //       user: user,
-      //     ),
-      //   ),
-      // );
+      return true;
     }
-
-    return firebaseApp;
+    return false;
   }
 
   Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
-
       final GoogleSignIn googleSignIn = GoogleSignIn();
-
-      final GoogleSignInAccount? googleSignInAccount =
-      await googleSignIn.signIn();
-
+      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
       if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
-
+        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
-
         try {
-          final UserCredential userCredential =
-          await auth.signInWithCredential(credential);
-
+          final UserCredential userCredential = await auth.signInWithCredential(credential);
           user = userCredential.user;
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'account-exists-with-different-credential') {
-            //'The account already exists with a different credential',
-
-          } else if (e.code == 'invalid-credential') {
-       //     'Error occurred while accessing credentials. Try again.',
+        } on FirebaseAuthException catch (error) {
+          if (error.code == 'account-exists-with-different-credential') {
+          } else if (error.code == 'invalid-credential') {
 
 
           }
-        } catch (e) {
-        //  'Error occurred using Google Sign In. Try again.',
-
+        } catch (error) {
+          _logger.e(_TAG, "signInWithGoogle()", message: error.toString());
         }
       }
 
 
     return user;
-  }
-
-  static Future<void> signOut({required BuildContext context}) async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-
-    try {
-      await googleSignIn.signOut();
-      await FirebaseAuth.instance.signOut();
-    } catch (e) {
-     // 'Error signing out. Try again.',
-
-    }
   }
 
 }
