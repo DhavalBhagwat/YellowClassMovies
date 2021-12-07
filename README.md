@@ -8,7 +8,7 @@ A YellowClass demo app
 git clone https://github.com/DhavalBhagwat/YellowClassMovies.git
 ```
 
-**iOS only**
+**iOS**
 ```
 1. git clone https://github.com/DhavalBhagwat/YellowClassMovies.git
 2. cd ios
