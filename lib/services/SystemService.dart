@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app/db/lib.dart';
 import 'package:app/services/lib.dart';
 import 'package:app/utils/lib.dart';
