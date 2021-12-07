@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:app/utils/lib.dart';
 import 'package:logger/logger.dart' as AppLogger;
-import 'package:path_provider/path_provider.dart';
 
 class Logger {
 
@@ -18,8 +14,6 @@ class Logger {
     }
     return _instance!;
   }
-
-  static const String _TAG = "Logger";
 
   void e(String tag, String methodName, {String? message}) {
     _logger?.e("$tag : $methodName - $message");
