@@ -13,8 +13,8 @@ class NavigationService {
     return _instance!;
   }
 
-  void dashboardActivity() => Get.offNamed('/dashboardActivity');
+  dashboardActivity() => Get.offNamed('/dashboardActivity');
 
-  void moviesFormActivity({bool? isEdit = false, int? id = -1}) => Get.offNamed('/moviesFormActivity', arguments: {'isEdit': isEdit, 'id': id});
+  moviesFormActivity({bool? isEdit = false, int? id = -1}) => Get.offNamed('/moviesFormActivity', arguments: {'isEdit': isEdit, 'id': id});
 
 }

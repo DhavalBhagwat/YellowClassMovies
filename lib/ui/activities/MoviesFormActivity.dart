@@ -37,41 +37,44 @@ class _MoviesFormActivityState extends State<MoviesFormActivity> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      resizeToAvoidBottomInset: false,
-      appBar: CupertinoNavigationBar(
-        backgroundColor: AppTheme.white,
-        middle: _isEdit! ? Text("Edit Movie") : Text("Add Movie"),
-        leading: InkWell(
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: AppTheme.colorAccent,
+    return WillPopScope(
+      child: Scaffold(
+        backgroundColor: AppTheme.background,
+        resizeToAvoidBottomInset: false,
+        appBar: CupertinoNavigationBar(
+          backgroundColor: AppTheme.white,
+          middle: _isEdit! ? Text("Edit Movie") : Text("Add Movie"),
+          leading: InkWell(
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: AppTheme.colorAccent,
+            ),
+            onTap: () => NavigationService.getInstance.dashboardActivity(),
           ),
-          onTap: () => NavigationService.getInstance.dashboardActivity(),
+        ),
+        body: Container(
+          margin: EdgeInsets.all(25.0),
+          child: Column(
+            children: [
+              _getPageHeader(context),
+
+              SizedBox(height: 20.0),
+
+              _getTextInput(context, "Movie Name", _nameController),
+
+              SizedBox(height: 20.0),
+
+              _getTextInput(context, "Director", _directorController),
+
+              SizedBox(height: 20.0),
+
+              _getSubmitButton(context, _isEdit! ? "Update" : "Add", () => _onClick()),
+
+            ],
+          ),
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.all(25.0),
-        child: Column(
-          children: [
-            _getPageHeader(context),
-
-            SizedBox(height: 20.0),
-
-            _getTextInput(context, "Movie Name", _nameController),
-
-            SizedBox(height: 20.0),
-
-            _getTextInput(context, "Director", _directorController),
-
-            SizedBox(height: 20.0),
-
-            _getSubmitButton(context, _isEdit! ? "Update" : "Add", () => _onClick()),
-
-          ],
-        ),
-      ),
+      onWillPop: () => NavigationService.getInstance.dashboardActivity()
     );
   }
 

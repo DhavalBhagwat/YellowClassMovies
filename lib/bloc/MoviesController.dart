@@ -27,10 +27,13 @@ class MoviesController extends GetxController {
   void _getMoviesList() async {
     isLoading(true);
     await DataService.getInstance.getMovieList(limit: _listLimit, offset: _offset).then((result) {
-      if (result != null) movies.assignAll(result);
+      if (result != null) {
+        if (movies.isNotEmpty) movies.clear();
+        movies.assignAll(result);
+      }
+      isLoading(false);
     }).catchError((error) {
       _logger.e(_TAG, "getMoviesList()", message: error.toString());
-    }).whenComplete(() {
       isLoading(false);
     });
   }
@@ -44,7 +47,6 @@ class MoviesController extends GetxController {
           if (result != null) movies.addAll(result);
         }).catchError((error) {
           _logger.e(_TAG, "updateMoviesList()", message: error.toString());
-        }).whenComplete(() {
           isUpdating(false);
         });
       }
@@ -58,12 +60,6 @@ class MoviesController extends GetxController {
     } catch (error) {
       _logger.e(_TAG, "removeFromList()", message: error.toString());
     }
-  }
-
-  @override
-  void onClose() {
-    if (movies.isNotEmpty) movies.clear();
-    super.onClose();
   }
 
 }

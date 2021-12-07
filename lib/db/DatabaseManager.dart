@@ -66,15 +66,8 @@ class DatabaseManager {
     });
   }
 
-  // Future<int?> delete(String tableName) async { //TODO: truncate
-  //   return await getInstance.openDb.then((db) async => await db?.delete(tableName)).catchError((error) {
-  //     _logger.e(_TAG, "delete()", message: error.toString());
-  //     return null;
-  //   });
-  // }
-
-  Future<int?> delete(String tableName, int id) async {
-    return await getInstance.openDb.then((db) async => await db?.delete(tableName, where: 'id = ?', whereArgs: [id])).catchError((error) {
+  Future<int?> delete(String tableName, String poster) async {
+    return await getInstance.openDb.then((db) async => await db?.delete(tableName, where: 'poster = ?', whereArgs: [poster])).catchError((error) {
       _logger.e(_TAG, "delete()", message: error.toString());
       return null;
     });

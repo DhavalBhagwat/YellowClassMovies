@@ -109,7 +109,7 @@ class MovieItem extends StatelessWidget {
   void _deleteMovie() async {
     try {
       await controller?.removeFromList(index!);
-      await DataService.getInstance.deleteMovie(id: index!, poster: movie!.poster);
+      await DataService.getInstance.deleteMovie(movie!.poster);
     } catch (error) {
       Logger.getInstance.e(_TAG, "deleteMovie()", message: error.toString());
     }
