@@ -5,22 +5,25 @@ import 'package:app/services/lib.dart';
 import 'package:app/utils/lib.dart';
 
 class LoginActivity extends StatefulWidget {
+
   @override
-  _LoginActivityState createState() => new _LoginActivityState();
+  _LoginActivityState createState() =>  _LoginActivityState();
+
 }
 
 class _LoginActivityState extends State<LoginActivity> {
+
   static const String _TAG = "LoginActivity";
   SystemService? _systemService;
   bool? _isLoading = true;
+  bool? _isLoggedIn = true;
 
   @override
   void initState() {
     super.initState();
     _systemService = SystemService.getInstance;
     try {
-      _preInit();
-      _postInit();
+      _init();
     } catch (error) {
       Logger.getInstance.e(_TAG, "initState()", message: error.toString());
     }
@@ -53,26 +56,28 @@ class _LoginActivityState extends State<LoginActivity> {
               width: 25,
               child: LoadingIndicator(),
             ),
-            visible: _isLoading!,
+            visible: _isLoading! && _isLoggedIn!,
           ),
           Visibility(
             child: Container(
               margin: EdgeInsets.only(top: ScreenUtils.statusBarHeightSimple),
               child: GoogleSignInButton(),
             ),
-            visible: _isLoading!,
+            visible: !_isLoggedIn!,
           ),
         ],
       ),
     );
   }
 
-  void _preInit() {
+  Future<void> _init() async {
     _systemService?.init();
-  }
-
-  void _postInit() {
-    _systemService?.checkForPermissionsAndProceed(context);
+    _isLoggedIn = await _systemService?.checkForPermissionsAndProceed(context);
+    if (!_isLoggedIn!) {
+      setState((){});
+    } else {
+      NavigationService.getInstance.dashboardActivity();
+    }
   }
 
 }

@@ -57,7 +57,8 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
     setState(() {
       _isSigningIn = false;
     });
-    if (user != null) {}
+    print(user.toString());
+    if (user != null) NavigationService.getInstance.dashboardActivity();
   }
 
 }
